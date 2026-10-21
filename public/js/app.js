@@ -843,7 +843,8 @@ async function runExport(height, mime) {
 
   const C = document.createElement('canvas'); C.width = W; C.height = H; const cctx = C.getContext('2d');
   clearLayoutCache();
-  const vstream = C.captureStream(30);
+  const vstream = C.captureStream(0); // نطلب كل إطار يدوياً لضمان التقاطه
+  const vtrack = vstream.getVideoTracks()[0];
   const stream = new MediaStream([...vstream.getVideoTracks(), ...streamDest.stream.getAudioTracks()]);
   const rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: height === 720 ? 5_000_000 : 10_000_000, audioBitsPerSecond: 160_000 });
   const chunks = []; rec.ondataavailable = (e) => e.data.size && chunks.push(e.data);
@@ -856,20 +857,29 @@ async function runExport(height, mime) {
   rec.start(500);
   const t0 = performance.now();
   label.textContent = 'جارٍ التسجيل… أبقِ الصفحة ظاهرة';
+  // المحرك: requestAnimationFrame والصفحة ظاهرة، ومؤقّت Worker إذا انتقلت للخلفية (حيث يتوقف rAF)
+  const ticker = new Worker(URL.createObjectURL(new Blob(['let i=setInterval(()=>postMessage(0),33);onmessage=()=>clearInterval(i);'], { type: 'text/javascript' })));
   await new Promise((resolve) => {
-    const tick = () => {
-      if (cancelled) return resolve();
+    let finished = false, lastT = -1;
+    const step = () => {
+      if (finished) return;
+      if (cancelled) { finished = true; return resolve(); }
       const tt = (performance.now() - t0) / 1000;
-      if (tt >= T + 0.25) return resolve();
+      if (tt >= T + 0.25) { finished = true; return resolve(); }
+      if (tt - lastT < 0.03) return; // تجنب إطارين متطابقين من المحركين
+      lastT = tt;
       const tc = Math.min(tt, T - 0.001);
       syncMedia(tc, true);
       renderFrame(cctx, project, tc, env);
-      vctx.drawImage(C, 0, 0, view.width, view.height);
+      vtrack.requestFrame?.();
+      if (!document.hidden) vctx.drawImage(C, 0, 0, view.width, view.height);
       bar.style.width = Math.min(100, tt / T * 100) + '%';
-      requestAnimationFrame(tick);
     };
-    requestAnimationFrame(tick);
+    ticker.onmessage = () => { if (document.hidden) step(); };
+    const raf = () => { if (finished) return; if (!document.hidden) step(); requestAnimationFrame(raf); };
+    requestAnimationFrame(raf);
   });
+  ticker.postMessage(0); ticker.terminate();
   const done = new Promise(r => rec.onstop = r);
   if (rec.state !== 'inactive') rec.stop();
   await done;
