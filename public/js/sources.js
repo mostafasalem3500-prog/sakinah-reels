@@ -2,7 +2,14 @@
 //          HadeethEnc (موسوعة الأحاديث المترجمة) — كلها عبر خادم الوسيط لتفادي CORS
 //          أقوال ابن القيم وابن الجوزي — منتقاة يدوياً ومُحالة إلى صفحات المكتبة الشاملة/إسلام ويب
 const memo = new Map();
+// يعمل عبر خادم الوسيط إن وُجد، وإلا يتصل بالمصادر مباشرة (للاستضافة الثابتة)
+const DIRECT = { '/api/quranenc/': 'https://quranenc.com/api/v1/', '/api/hadeethenc/': 'https://hadeethenc.com/api/v1/', '/api/audio/': 'https://everyayah.com/data/' };
+let hasProxy = true;
+export const proxyReady = fetch('health', { cache: 'no-store' }).then(r => r.ok ? r.text() : '').then(t => (hasProxy = t === 'ok')).catch(() => (hasProxy = false));
+export const resolveUrl = (u) => { if (hasProxy) return u; for (const [k, v] of Object.entries(DIRECT)) if (u.startsWith(k)) return v + u.slice(k.length); return u; };
 async function getJson(url) {
+  await proxyReady;
+  url = resolveUrl(url);
   if (memo.has(url)) return memo.get(url);
   const p = fetch(url).then(async r => { if (!r.ok) throw new Error('تعذر الجلب من المصدر (' + r.status + ')'); return r.json(); });
   memo.set(url, p);
@@ -33,7 +40,7 @@ export async function suraText(key, sura) {
 // تنظيف علامات الحواشي مثل [98] فقط — دون أي تعديل للمعنى
 export const cleanTr = (s) => String(s || '').replace(/\s*\[\d+\]/g, '').replace(/\s{2,}/g, ' ').trim();
 
-export const recitationUrl = (reciter, s, a) => `/api/audio/${reciter}/${String(s).padStart(3, '0')}${String(a).padStart(3, '0')}.mp3`;
+export const recitationUrl = (reciter, s, a) => resolveUrl(`/api/audio/${reciter}/${String(s).padStart(3, '0')}${String(a).padStart(3, '0')}.mp3`);
 
 // ---------- الحديث ----------
 export async function hadithLanguages() { return getJson('/api/hadeethenc/languages'); }
