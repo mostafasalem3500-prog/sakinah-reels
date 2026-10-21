@@ -374,7 +374,21 @@ function computeLayout(ctx, W, H, sc, st) {
   if (st.vpos === 'upper' && blocks.some(b => b.kind === 'tafsir')) area.bottom = H * (tall ? 0.80 : 0.9);
   const padX = W * (st.box === 'none' || st.box === 'ribbon' ? 0.09 : 0.13);
   const maxW = W - padX * 2;
-  const refH = st.showRef && sc.content?.ref ? 70 * scaleW : 0;
+  // المرجع: يصغر الخط ثم يلتف على عدة أسطر إن كان طويلاً (مثل تخريج الأحاديث)
+  let refH = 0, ref = null;
+  if (st.showRef && sc.content?.ref) {
+    const refMax = W * 0.8;
+    let rs = 30 * scaleW;
+    ctx.font = `600 ${rs}px "Cairo", sans-serif`; ctx.direction = 'rtl';
+    const tw0 = ctx.measureText(sc.content.ref).width;
+    if (tw0 > refMax) rs = Math.max(22 * scaleW, rs * refMax / tw0);
+    const font = `600 ${rs}px "Cairo", sans-serif`; ctx.font = font;
+    const lw = wrap(ctx, sc.content.ref, refMax, true);
+    const lines = lw.lines.slice(0, 4);
+    const lh = rs * 1.5;
+    ref = { font, lines, lh, space: lw.space, size: rs, w: Math.max(...lines.map(l => l.width)) };
+    refH = lines.length * lh + 26 * scaleW;
+  }
   let f = 1, res;
   for (let iter = 0; iter < 14; iter++) {
     let total = 0; const out = [];
@@ -393,7 +407,7 @@ function computeLayout(ctx, W, H, sc, st) {
       out.push({ ...b, font, size, lh, gap, ...lw });
     });
     total += refH ? refH + 30 * scaleW : 0;
-    res = { blocks: out, total, area, maxW, refH, scaleW };
+    res = { blocks: out, total, area, maxW, refH, ref, scaleW };
     if (total <= (area.bottom - area.top) || f < 0.4) break;
     f *= 0.92;
   }
@@ -486,7 +500,7 @@ function drawText(ctx, W, H, sc, st, lt, D, env) {
   // المرجع
   if (st.showRef && sc.content?.ref) {
     const k = easeOut((lt - arEnd + 0.2) / 0.7);
-    if (k > 0) drawRef(ctx, W, y + 30 * scaleW + L.refH / 2, sc.content.ref, st, k, scaleW);
+    if (k > 0) drawRef(ctx, W, y + 30 * scaleW + L.refH / 2, L.ref, L.refH, st, k, scaleW);
   }
   // سطر المصدر
   if (st.showSource !== false && sc.content?.source) {
@@ -500,13 +514,14 @@ function drawText(ctx, W, H, sc, st, lt, D, env) {
   }
 }
 
-function drawRef(ctx, W, cy, text, st, a, s) {
+function drawRef(ctx, W, cy, R, h, st, a, s) {
   ctx.save(); ctx.globalAlpha = a;
-  ctx.font = `600 ${Math.round(30 * s)}px "Cairo", sans-serif`; ctx.direction = 'rtl'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-  const tw = ctx.measureText(text).width, ph = 62 * s, pw = tw + 70 * s;
+  ctx.font = R.font; ctx.direction = 'rtl'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  const pw = R.w + 70 * s, single = R.lines.length === 1;
   ctx.fillStyle = 'rgba(0,0,0,.28)'; ctx.strokeStyle = hexA(st.accent, 0.9); ctx.lineWidth = 2 * s;
-  ctx.beginPath(); ctx.roundRect(W / 2 - pw / 2, cy - ph / 2, pw, ph, ph / 2); ctx.fill(); ctx.stroke();
-  ctx.fillStyle = st.accent; ctx.fillText(text, W / 2, cy + 2 * s);
+  ctx.beginPath(); ctx.roundRect(W / 2 - pw / 2, cy - h / 2, pw, h, single ? h / 2 : 22 * s); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = st.accent;
+  R.lines.forEach((l, i) => ctx.fillText(l.words.map(w => w.t).join(' '), W / 2, cy - h / 2 + 13 * s + R.lh * (i + 0.5) + 2 * s));
   ctx.restore();
 }
 
