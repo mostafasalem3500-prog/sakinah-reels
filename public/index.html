@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#06261c">
+<title>استوديو ريلز السكينة</title>
+<meta name="description" content="صانع ريلز إسلامية: آيات من مصحف المدينة، أحاديث موثقة، وأقوال ابن القيم وابن الجوزي — مع حفظ كامل في Google Drive">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&family=Tajawal:wght@400;700&family=Noto+Naskh+Arabic:wght@400;600&family=Scheherazade+New:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Reem+Kufi:wght@400;700&family=Inter:wght@400;500;600&family=Noto+Sans:wght@400;500&family=Vazirmatn:wght@400;500&family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+<script src="config.js"></script>
+<style>
+:root{
+  --bg:#07120e; --bg2:#0b1c16; --panel:#0f2620; --panel2:#143029; --line:#21443a; --line2:#2d5a4d;
+  --text:#eef3ef; --muted:#9fb6ad; --gold:#d4af37; --gold2:#f0d27a; --goldink:#1b1404;
+  --danger:#e26d5c; --ok:#4fbf8b; --focus:#f0d27a;
+  --r:14px; --r2:10px; --shadow:0 10px 40px rgba(0,0,0,.45);
+  --font:"Cairo","Tajawal",system-ui,sans-serif;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light){
+  :root:not([data-theme="dark"]){
+    --bg:#f3efe4; --bg2:#ebe5d4; --panel:#fffdf7; --panel2:#f6f1e3; --line:#e0d6bd; --line2:#cfc2a0;
+    --text:#1c2a24; --muted:#5d6f66; --gold:#9a7412; --gold2:#b8901f; --goldink:#fff;
+    --shadow:0 10px 30px rgba(60,40,0,.12); color-scheme: light;
+  }
+}
+:root[data-theme="dark"]{ color-scheme: dark; }
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;line-height:1.55;overscroll-behavior:contain;-webkit-tap-highlight-color:transparent}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+
+/* ---------- الهيكل ---------- */
+.app{display:grid;grid-template-rows:auto 1fr auto;height:100dvh}
+header.top{display:flex;align-items:center;gap:10px;padding:10px 16px;background:linear-gradient(180deg,var(--bg2),var(--bg));border-bottom:1px solid var(--line);min-height:60px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:17px;white-space:nowrap}
+.brand svg{width:34px;height:34px}
+.brand small{display:block;font-weight:500;font-size:11px;color:var(--muted);margin-top:-4px}
+.proj-name{flex:1;min-width:80px;max-width:280px;background:transparent;border:1px solid transparent;border-radius:8px;padding:6px 10px;font-weight:600}
+.proj-name:hover,.proj-name:focus{border-color:var(--line2);background:var(--panel)}
+.top .sp{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:40px;padding:0 14px;border-radius:10px;border:1px solid var(--line2);background:var(--panel);font-weight:600;font-size:14px;white-space:nowrap;transition:background .15s,border-color .15s,transform .1s}
+.btn:hover{background:var(--panel2);border-color:var(--gold)}
+.btn:active{transform:scale(.97)}
+.btn svg{width:18px;height:18px;flex:none}
+.btn.gold{background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--goldink);border-color:transparent}
+.btn.gold:hover{filter:brightness(1.07)}
+.btn.ghost{background:transparent;border-color:transparent}
+.btn.ghost:hover{background:var(--panel)}
+.btn.sm{min-height:34px;padding:0 10px;font-size:13px}
+.btn.icon{width:40px;padding:0}
+.btn.danger{color:var(--danger)}
+.btn[disabled]{opacity:.5;pointer-events:none}
+.drive-btn .dot{width:9px;height:9px;border-radius:50%;background:var(--danger)}
+.drive-btn.on .dot{background:var(--ok);box-shadow:0 0 0 3px rgba(79,191,139,.2)}
+
+main.work{display:grid;grid-template-columns:72px 360px 1fr 320px;min-height:0}
+nav.rail{display:flex;flex-direction:column;gap:4px;padding:10px 6px;background:var(--bg2);border-inline-end:1px solid var(--line);overflow-y:auto}
+.rail button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:9px 2px;border:0;border-radius:10px;background:transparent;color:var(--muted);font-size:11px;font-weight:600}
+.rail button svg{width:22px;height:22px}
+.rail button:hover{background:var(--panel);color:var(--text)}
+.rail button[aria-selected="true"]{background:var(--panel2);color:var(--gold2)}
+.panel{background:var(--panel);border-inline-end:1px solid var(--line);overflow-y:auto;min-height:0}
+.panel section{display:none;padding:16px}
+.panel section.on{display:block}
+.panel h2{font-size:16px;margin:0 0 4px}
+.panel .hint{color:var(--muted);font-size:12.5px;margin:0 0 14px}
+.stage{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:16px;min-height:0;min-width:0;background:radial-gradient(ellipse at center,var(--bg2),var(--bg))}
+.canvas-wrap{position:relative;flex:1;min-height:0;width:100%;display:flex;align-items:center;justify-content:center}
+#view{max-width:100%;max-height:100%;border-radius:12px;box-shadow:var(--shadow);background:#000;display:block}
+.safe{position:absolute;pointer-events:none;border-radius:12px;display:none}
+.safe.on{display:block}
+.safe i{position:absolute;background:repeating-linear-gradient(45deg,rgba(226,109,92,.18) 0 8px,transparent 8px 16px);border:1px dashed rgba(226,109,92,.6)}
+.transport{display:flex;align-items:center;gap:10px;width:min(560px,100%)}
+.transport .time{font-variant-numeric:tabular-nums;font-size:13px;color:var(--muted);min-width:92px;text-align:center;direction:ltr}
+input[type=range]{accent-color:var(--gold);width:100%}
+.play{width:48px;height:48px;border-radius:50%;border:0;background:linear-gradient(180deg,var(--gold2),var(--gold));color:var(--goldink);display:grid;place-items:center;flex:none}
+.play svg{width:22px;height:22px}
+.inspector{background:var(--panel);border-inline-start:1px solid var(--line);overflow-y:auto;padding:16px;min-height:0}
+
+/* ---------- الخط الزمني ---------- */
+.timeline{background:var(--bg2);border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;align-items:stretch;overflow-x:auto;min-height:124px}
+.tl-empty{color:var(--muted);font-size:13px;display:flex;align-items:center;padding:0 10px}
+.clip{position:relative;flex:none;width:88px;border-radius:10px;border:2px solid var(--line);background:var(--panel);overflow:hidden;cursor:pointer;display:flex;flex-direction:column;transition:border-color .15s,transform .15s}
+.clip:hover{border-color:var(--line2)}
+.clip.sel{border-color:var(--gold)}
+.clip.dragging{opacity:.4}
+.clip canvas{width:100%;aspect-ratio:9/16;display:block;background:#000;max-height:80px;object-fit:cover}
+.clip .meta{display:flex;justify-content:space-between;padding:3px 6px;font-size:11px;color:var(--muted)}
+.clip .badge{position:absolute;top:4px;inset-inline-start:4px;background:rgba(0,0,0,.65);color:#fff;font-size:10px;padding:1px 6px;border-radius:6px}
+.add-clip{flex:none;width:88px;border:2px dashed var(--line2);border-radius:10px;background:transparent;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px}
+.add-clip:hover{border-color:var(--gold);color:var(--gold2)}
+
+/* ---------- عناصر النماذج ---------- */
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.field>label,.lbl{font-size:12.5px;color:var(--muted);font-weight:600}
+.row{display:flex;gap:8px;align-items:center}
+.row>*{flex:1;min-width:0}
+select,input[type=text],input[type=number],input[type=search],input[type=url],textarea{width:100%;min-height:42px;padding:8px 11px;border-radius:10px;border:1px solid var(--line2);background:var(--bg2);font-size:16px}
+textarea{min-height:90px;resize:vertical;line-height:1.7}
+input[type=color]{width:44px;height:42px;border:1px solid var(--line2);border-radius:10px;background:var(--bg2);padding:3px;flex:none}
+.seg{display:flex;flex-wrap:wrap;gap:6px}
+.seg button{flex:1 1 auto;min-height:36px;padding:0 10px;border-radius:9px;border:1px solid var(--line2);background:var(--bg2);font-size:13px;font-weight:600;color:var(--muted)}
+.seg button[aria-pressed="true"]{border-color:var(--gold);color:var(--gold2);background:var(--panel2)}
+.switch{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:40px;font-size:14px}
+.switch input{width:44px;height:24px;appearance:none;background:var(--line2);border-radius:20px;position:relative;cursor:pointer;transition:background .2s;flex:none}
+.switch input::after{content:"";position:absolute;top:3px;inset-inline-start:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:inset-inline-start .2s}
+.switch input:checked{background:var(--gold)}
+.switch input:checked::after{inset-inline-start:23px}
+.group{border:1px solid var(--line);border-radius:var(--r);padding:12px;margin-bottom:12px;background:var(--bg2)}
+.group>h3{margin:0 0 10px;font-size:13.5px;color:var(--gold2)}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.chip{border:1px solid var(--line2);background:var(--bg2);border-radius:20px;padding:5px 12px;font-size:12.5px;min-height:32px}
+.chip:hover{border-color:var(--gold);color:var(--gold2)}
+
+/* ---------- القوالب ---------- */
+.tpl-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.tpl{border:2px solid var(--line);border-radius:12px;background:var(--bg2);padding:0;overflow:hidden;text-align:start}
+.tpl canvas{width:100%;aspect-ratio:9/14;display:block}
+.tpl div{padding:7px 9px}
+.tpl b{display:block;font-size:13.5px}
+.tpl small{display:block;color:var(--muted);font-size:11px;line-height:1.4}
+.tpl[aria-pressed="true"]{border-color:var(--gold)}
+.tpl:hover{border-color:var(--line2)}
+
+/* ---------- قوائم النتائج ---------- */
+.results{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.item{border:1px solid var(--line);border-radius:12px;padding:10px 12px;background:var(--bg2)}
+.item .ar{font-family:"Amiri Quran","Amiri",serif;font-size:21px;line-height:2;color:var(--text)}
+.item .ar.n{font-family:"Noto Naskh Arabic","Amiri",serif;font-size:17px;line-height:1.9}
+.item .tr{font-size:13.5px;color:var(--muted);margin-top:4px;line-height:1.6}
+.item .src{font-size:11.5px;color:var(--gold2);margin-top:6px}
+.item .acts{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.item label.ck{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+.item label.ck input{margin-top:9px;width:18px;height:18px;accent-color:var(--gold);flex:none}
+.list-btn{display:block;width:100%;text-align:start;border:1px solid var(--line);border-radius:10px;background:var(--bg2);padding:10px 12px;font-size:14px;margin-bottom:6px;line-height:1.6}
+.list-btn:hover{border-color:var(--gold)}
+.list-btn small{color:var(--muted);display:block;font-size:11.5px}
+.crumbs{display:flex;flex-wrap:wrap;gap:4px;align-items:center;font-size:12.5px;margin-bottom:10px;color:var(--muted)}
+.crumbs button{border:0;background:transparent;color:var(--gold2);padding:2px 4px;text-decoration:underline}
+.loading{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px;padding:14px 4px}
+.loading::before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid var(--line2);border-top-color:var(--gold);animation:spin .8s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err{color:var(--danger);font-size:13px;padding:8px 2px}
+
+/* ---------- الوسائط ---------- */
+.media-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.mthumb{position:relative;aspect-ratio:9/12;border-radius:10px;overflow:hidden;border:2px solid var(--line);background:var(--bg2);padding:0}
+.mthumb img,.mthumb video,.mthumb canvas{width:100%;height:100%;object-fit:cover;display:block}
+.mthumb .k{position:absolute;bottom:4px;inset-inline-start:4px;background:rgba(0,0,0,.65);color:#fff;font-size:10px;border-radius:6px;padding:1px 6px}
+.mthumb .cloud{position:absolute;top:4px;inset-inline-end:4px;width:20px;height:20px;border-radius:50%;background:rgba(0,0,0,.6);display:grid;place-items:center}
+.mthumb .cloud svg{width:13px;height:13px}
+.mthumb .bar{position:absolute;bottom:0;inset-inline:0;height:4px;background:rgba(0,0,0,.4)}
+.mthumb .bar i{display:block;height:100%;background:var(--gold);width:0}
+.mthumb:hover{border-color:var(--gold)}
+.mthumb.sel{border-color:var(--gold2)}
+.mthumb .nm{position:absolute;inset:auto 0 0 0;padding:16px 6px 4px;font-size:10.5px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.75));white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.drop{border:2px dashed var(--line2);border-radius:12px;padding:16px;text-align:center;color:var(--muted);font-size:13px;margin-bottom:12px}
+.drop.over{border-color:var(--gold);color:var(--gold2)}
+
+/* ---------- نوافذ ---------- */
+dialog{border:1px solid var(--line2);border-radius:18px;background:var(--panel);color:var(--text);padding:0;width:min(560px,calc(100vw - 32px));box-shadow:var(--shadow)}
+dialog::backdrop{background:rgba(0,0,0,.6);backdrop-filter:blur(4px)}
+dialog .dh{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--line)}
+dialog .dh h2{margin:0;font-size:17px}
+dialog .db{padding:16px 18px;max-height:70vh;overflow-y:auto}
+dialog .df{display:flex;gap:8px;justify-content:flex-end;padding:12px 18px;border-top:1px solid var(--line);flex-wrap:wrap}
+.progress{height:10px;border-radius:10px;background:var(--bg2);overflow:hidden;border:1px solid var(--line)}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--gold),var(--gold2));transition:width .2s}
+ol.steps{padding-inline-start:20px;margin:6px 0 12px;font-size:13.5px;color:var(--muted)}
+ol.steps li{margin-bottom:6px}
+code{background:var(--bg2);border:1px solid var(--line);border-radius:6px;padding:1px 6px;font-size:12.5px;direction:ltr;unicode-bidi:isolate}
+.note{background:var(--bg2);border:1px solid var(--line);border-inline-start:3px solid var(--gold);border-radius:10px;padding:10px 12px;font-size:13px;color:var(--muted);margin:10px 0}
+.toast{position:fixed;bottom:calc(150px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%) translateY(20px);background:var(--panel2);border:1px solid var(--gold);color:var(--text);padding:10px 18px;border-radius:12px;font-size:14px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .25s,transform .25s;z-index:99;max-width:calc(100vw - 32px)}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.mobile-tabs{display:none}
+
+/* ---------- الجوال ---------- */
+@media (max-width:1180px){ main.work{grid-template-columns:72px 330px 1fr} .inspector{display:none} .inspector.as-tab{display:block} }
+@media (max-width:860px){
+  .app{grid-template-rows:auto auto auto auto 1fr;height:auto;min-height:100dvh}
+  header.top{padding:8px 12px;flex-wrap:wrap;gap:8px}
+  .brand small{display:none}
+  .proj-name{order:5;flex-basis:100%;max-width:none}
+  .hide-m{display:none !important}
+  main.work{display:contents}
+  .stage{order:2;padding:10px;height:58vh;min-height:360px}
+  .timeline{order:3;min-height:110px}
+  nav.rail{order:4;flex-direction:row;overflow-x:auto;position:sticky;top:0;z-index:5;border:0;border-bottom:1px solid var(--line);padding:6px}
+  .rail button{flex:none;min-width:64px}
+  .panel{order:5;border:0;overflow:visible}
+  .panel section{padding:14px 14px 40px}
+  .inspector{display:none !important}
+  .chips{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px}
+  .chip{flex:none}
+  .toast{bottom:calc(20px + env(safe-area-inset-bottom))}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important;animation:none !important} }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="top">
+    <div class="brand">
+      <svg viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f0d27a"/><stop offset="1" stop-color="#b98e1e"/></linearGradient></defs><rect width="64" height="64" rx="16" fill="#0b3d2e"/><path d="M32 10l5.6 8.4 9.9-2-2 9.9L54 32l-8.4 5.6 2 9.9-9.9-2L32 54l-5.6-8.4-9.9 2 2-9.9L10 32l8.4-5.6-2-9.9 9.9 2z" fill="none" stroke="url(#lg)" stroke-width="2.4"/><path d="M27 24l14 8-14 8z" fill="url(#lg)"/></svg>
+      <div>استوديو ريلز السكينة<small>آيات • أحاديث • أقوال السلف</small></div>
+    </div>
+    <input class="proj-name" id="projName" aria-label="اسم المشروع" value="ريل جديد">
+    <select id="format" aria-label="مقاس الفيديو" style="width:auto;min-height:40px"></select>
+    <div class="sp hide-m"></div>
+    <button class="btn drive-btn" id="driveBtn" title="الاتصال بـ Google Drive"><span class="dot"></span><span id="driveLbl">ربط درايف</span></button>
+    <button class="btn" id="saveBtn" title="حفظ المشروع في درايف"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8V3M8 21v-7h8v7"/></svg><span class="hide-m">حفظ</span></button>
+    <button class="btn gold" id="exportBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 21h16"/></svg>تصدير</button>
+  </header>
+
+  <main class="work">
+    <nav class="rail" role="tablist" aria-label="الأدوات" id="rail"></nav>
+    <div class="panel" id="panel">
+      <section data-tab="templates">
+        <h2>القوالب الجاهزة</h2>
+        <p class="hint">اختر قالباً ليُطبَّق على كل المشاهد. يمكنك تعديله من «التنسيق» وحفظه قالباً خاصاً في درايف.</p>
+        <div class="tpl-grid" id="tplGrid"></div>
+        <div class="group" style="margin-top:14px"><h3>قوالبي في درايف</h3><div id="myTpls" class="results"><p class="hint" style="margin:0">اربط درايف لعرض قوالبك.</p></div></div>
+      </section>
+
+      <section data-tab="quran">
+        <h2>القرآن الكريم</h2>
+        <p class="hint">النص من مصحف المدينة النبوية (مجمع الملك فهد)، والترجمات والتفسير من «موسوعة القرآن الكريم المترجمة» — دون أي ترجمة آلية.</p>
+        <div class="lbl" style="margin-bottom:6px">مقترحات سريعة</div>
+        <div class="chips" id="ayaChips"></div>
+        <div class="field"><label for="qSura">السورة</label><select id="qSura"></select></div>
+        <div class="row" style="margin-bottom:12px"><div class="field" style="margin:0"><label class="lbl" for="qFrom">من آية</label><input id="qFrom" type="number" inputmode="numeric" min="1" value="1"></div><div class="field" style="margin:0"><label class="lbl" for="qTo">إلى آية</label><input id="qTo" type="number" inputmode="numeric" min="1" value="7"></div></div>
+        <div class="field"><label for="qTr">لغة الترجمة (من المصدر)</label><select id="qTr"><option value="">بدون ترجمة</option></select></div>
+        <div class="field"><label for="qTaf">التفسير</label><select id="qTaf"><option value="">بدون تفسير</option></select></div>
+        <div class="field"><label for="qRec">صوت التلاوة</label><select id="qRec"></select></div>
+        <div class="row"><button class="btn gold" id="qFetch">عرض الآيات</button></div>
+        <div id="qRes" class="results"></div>
+      </section>
+
+      <section data-tab="hadith">
+        <h2>الأحاديث النبوية</h2>
+        <p class="hint">من «موسوعة الأحاديث النبوية المترجمة» (HadeethEnc) — نص الحديث وتخريجه ودرجته وترجماته المعتمدة.</p>
+        <div class="field"><label for="hLang">لغة الترجمة</label><select id="hLang"><option value="">العربية فقط</option></select></div>
+        <div class="crumbs" id="hCrumbs"></div>
+        <div id="hRes"></div>
+      </section>
+
+      <section data-tab="salaf">
+        <h2>أقوال السلف</h2>
+        <p class="hint">مختارات قصيرة من كتب ابن القيم وابن الجوزي، موثّقة باسم الكتاب ورابط المصدر في المكتبة الشاملة أو إسلام ويب. النص بالعربية كما في الكتاب.</p>
+        <div class="seg" id="sFilter" style="margin-bottom:10px"></div>
+        <input type="search" id="sSearch" placeholder="ابحث في الأقوال…" aria-label="بحث في الأقوال">
+        <div id="sRes" class="results"></div>
+      </section>
+
+      <section data-tab="text">
+        <h2>نص حر</h2>
+        <p class="hint">اكتب ذكراً أو دعاءً أو عنواناً، مع ذكر مصدره.</p>
+        <div class="field"><label for="tAr">النص العربي</label><textarea id="tAr" placeholder="اكتب النص هنا"></textarea></div>
+        <div class="field"><label for="tTr">نص ثانوي / ترجمة (اختياري)</label><textarea id="tTr" style="min-height:60px"></textarea></div>
+        <div class="field"><div><label class="lbl" for="tTrLang">لغته</label><select id="tTrLang"><option value="en">English</option><option value="ar">العربية</option><option value="fr">Français</option><option value="ur">اردو</option><option value="id">Indonesia</option><option value="tr">Türkçe</option></select></div></div>
+        <div class="field"><label for="tRef">المرجع (يظهر أسفل النص)</label><input type="text" id="tRef" placeholder="مثال: صحيح مسلم"></div>
+        <button class="btn gold" id="tAdd">إضافة مشهد</button>
+      </section>
+
+      <section data-tab="media">
+        <h2>الوسائط</h2>
+        <p class="hint">الصور والفيديو لا تُخزَّن في الموقع: تُرفع مباشرة إلى مجلد «استوديو ريلز السكينة/الوسائط» في درايف، وتبقى على جهازك أثناء التحرير فقط.</p>
+        <div class="drop" id="drop">اسحب الصور أو الفيديو هنا<br>أو
+          <div class="row" style="margin-top:8px;justify-content:center;flex-wrap:wrap">
+            <button class="btn sm" id="mDevice">من الجهاز</button>
+            <button class="btn sm" id="mDrive">من مجلد التطبيق</button>
+            <button class="btn sm" id="mPicker">من كل درايف</button>
+          </div>
+          <input type="file" id="mFile" accept="image/*,video/*" multiple hidden>
+        </div>
+        <label class="switch"><span>رفع تلقائي إلى درايف</span><input type="checkbox" id="autoUp" checked></label>
+        <div class="lbl" style="margin:10px 0 6px">خلفيات متحركة جاهزة (بدون تخزين)</div>
+        <div class="media-grid" id="genGrid"></div>
+        <div class="row" style="margin:14px 0 6px"><div class="lbl">وسائطي</div><button class="btn sm ghost" id="mAuto" style="flex:none">توزيع على المشاهد</button></div>
+        <div class="media-grid" id="mediaGrid"></div>
+        <div class="group" style="margin-top:14px"><h3>صوت إضافي للريل</h3>
+          <p class="hint" style="margin-bottom:8px">تعليق صوتي أو إنشاد بدون موسيقى (اختياري).</p>
+          <div class="row"><button class="btn sm" id="aDevice">من الجهاز</button><button class="btn sm" id="aDrive">من درايف</button><button class="btn sm ghost danger" id="aClear">إزالة</button></div>
+          <input type="file" id="aFile" accept="audio/*" hidden>
+          <div id="aInfo" class="hint" style="margin:8px 0"></div>
+          <div class="field"><label for="aVol">مستوى الصوت</label><input type="range" id="aVol" min="0" max="1" step="0.05" value="0.6"></div>
+        </div>
+      </section>
+
+      <section data-tab="style">
+        <h2>التنسيق العام</h2>
+        <p class="hint">يُطبَّق على كل المشاهد. للتعديل على مشهد واحد استخدم لوحة «المشهد».</p>
+        <div id="styleForm"></div>
+        <button class="btn" id="saveTpl" style="width:100%">حفظ هذا التنسيق كقالب في درايف</button>
+      </section>
+
+      <section data-tab="scene" id="sceneTab"><div id="sceneFormM"></div></section>
+
+      <section data-tab="projects">
+        <h2>المشاريع والإعدادات</h2>
+        <div class="group"><h3>مشاريعي في درايف</h3><div id="projList" class="results"><p class="hint" style="margin:0">اربط درايف لعرض مشاريعك.</p></div>
+          <div class="row" style="margin-top:10px"><button class="btn sm" id="newProj">مشروع جديد</button><button class="btn sm" id="refreshProj">تحديث</button></div></div>
+        <div class="group"><h3>فيديوهاتي المصدّرة</h3><div id="vidList" class="results"></div></div>
+        <div class="group"><h3>الإعدادات</h3>
+          <label class="switch"><span>إظهار المناطق الآمنة (واجهة إنستقرام/تيك توك)</span><input type="checkbox" id="safeT"></label>
+          <label class="switch"><span>إظهار سطر المصدر أسفل الفيديو</span><input type="checkbox" id="srcT" checked></label>
+          <button class="btn sm" id="openSettings" style="margin-top:8px">إعدادات ربط Google</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="stage">
+      <div class="canvas-wrap" id="cwrap">
+        <canvas id="view" width="1080" height="1920" aria-label="معاينة الريل"></canvas>
+        <div class="safe" id="safe"><i style="top:0;left:0;right:0;height:11%"></i><i style="bottom:0;left:0;right:0;height:20%"></i><i style="top:40%;left:0;width:13%;bottom:20%"></i></div>
+      </div>
+      <div class="transport">
+        <button class="play" id="playBtn" aria-label="تشغيل"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4v16l13-8z"/></svg></button>
+        <input type="range" id="scrub" min="0" max="1" step="0.01" value="0" aria-label="الموضع الزمني">
+        <span class="time" id="time">0:00 / 0:00</span>
+      </div>
+    </div>
+
+    <aside class="inspector" id="inspector" aria-label="خصائص المشهد"><div id="sceneForm"></div></aside>
+  </main>
+
+  <div class="timeline" id="timeline" aria-label="المشاهد"></div>
+</div>
+
+<dialog id="dlgExport">
+  <div class="dh"><h2>تصدير الريل</h2><button class="btn icon ghost" data-close aria-label="إغلاق">✕</button></div>
+  <div class="db" id="expBody"></div>
+  <div class="df" id="expFoot"></div>
+</dialog>
+
+<dialog id="dlgSettings">
+  <div class="dh"><h2>ربط Google Drive</h2><button class="btn icon ghost" data-close aria-label="إغلاق">✕</button></div>
+  <div class="db">
+    <p style="margin-top:0">يحتاج الربط إلى «معرّف عميل OAuth» مجاني من Google Cloud — مرة واحدة فقط:</p>
+    <ol class="steps">
+      <li>افتح <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener" style="color:var(--gold2)">Google Cloud Console ← Credentials</a> وأنشئ مشروعاً.</li>
+      <li>فعّل <b>Google Drive API</b> (و<b>Google Picker API</b> اختيارياً).</li>
+      <li>في «OAuth consent screen» اختر External وأضف بريدك كمستخدم اختبار.</li>
+      <li>Create Credentials ← OAuth client ID ← Web application، وأضف في Authorized JavaScript origins: <code id="originCode"></code></li>
+      <li>انسخ Client ID والصقه هنا. (لاختيار ملفات من كل الدرايف أنشئ أيضاً API key وانسخ رقم المشروع Project number).</li>
+    </ol>
+    <div class="field"><label for="cfgClient">Client ID</label><input type="text" id="cfgClient" dir="ltr" placeholder="xxxx.apps.googleusercontent.com"></div>
+    <div class="field"><label for="cfgKey">API Key (اختياري — لمنتقي درايف)</label><input type="text" id="cfgKey" dir="ltr"></div>
+    <div class="field"><label for="cfgApp">Project number (اختياري)</label><input type="text" id="cfgApp" dir="ltr" inputmode="numeric"></div>
+    <div class="note">الصلاحية المطلوبة <code>drive.file</code> فقط: لا يستطيع الموقع رؤية أي ملف في درايفك إلا ما أنشأه هو أو ما تختاره بنفسك.</div>
+  </div>
+  <div class="df"><button class="btn" data-close>إلغاء</button><button class="btn gold" id="cfgSave">حفظ واتصال</button></div>
+</dialog>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

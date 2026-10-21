@@ -1,0 +1,9 @@
+{
+  "name": "sakinah-reels-studio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "استوديو ريلز السكينة — صانع ريلز إسلامية مع Google Drive",
+  "main": "server.js",
+  "scripts": { "start": "node server.js" },
+  "engines": { "node": ">=20" }
+}
